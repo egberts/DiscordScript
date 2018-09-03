@@ -25,5 +25,5 @@ setup(name="DiscordScript",
           'Topic :: Software Development :: Interpreters'
       ],
       keywords="language discord scripting script tatsu parser interpreter",
-      install_requires=["tatsu"],
+      install_requires=["tatsu", "discord.py"],
       )

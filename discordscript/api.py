@@ -1,10 +1,9 @@
-from .grammar.grammar import DiscordScriptParser
+from discordscript.grammar import DiscordScriptParser
 from os.path import abspath
 from _io import TextIOWrapper
 import discord
 from .tokens import *
 from .exc import SyntaxError, _SignalAbort
-from builtins import exit as ex
 
 
 class Client(discord.Client):

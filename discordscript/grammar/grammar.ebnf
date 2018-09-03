@@ -1,0 +1,105 @@
+@@grammar::DiscordScript
+
+
+start
+   =
+   { command_main | config_dir }+ $
+   ;
+
+
+command_main
+   =
+   type:`command` "!" name:/[^{]+/ '{' content:generic_body '}'
+   ;
+
+generic_body
+   =
+   { all_stmt }+
+   ;
+
+all_stmt
+   =
+   | func_main
+   | if_stmt
+   | assign_main
+   ;
+
+
+config_dir
+   =
+   type:`config` "@" name:/[A-Za-z_]+/ ":" content:/[^;]+/ ";"
+   ;
+
+
+assign_main
+   =
+   type:`assignment` name:/[A-Za-z_]+/ '=' content:assign_cont
+   ;
+
+
+assign_cont
+   =
+   | func_main
+   | @:item ";"
+   ;
+
+
+if_stmt
+   =
+   type:`if` 'if' '(' condition:logic_main ')' '{' content:[generic_body] '}'
+   ;
+
+func_main
+   =
+   type:`function` content:(/[A-Za-z_]+/ { item }*) ";"
+   ;
+
+
+logic_main
+   =
+   | type: `logic` content:(item logic_op item)
+   | type: `logic` content:logic_bool
+   ;
+
+logic_op
+   =
+   | type: `logic_op` content:'is'
+   | type: `logic_op` content:'in'
+   | type: `logic_op` content:'!is'
+   | type: `logic_op` content:'!in'
+   ;
+
+logic_bool
+   =
+   | type:`bool` content:'true'
+   | type:`bool` content:'false'
+   ;
+
+item
+   =
+   | arg
+   | logic_bool
+   | string
+   | keyword
+   | id
+   ;
+
+keyword
+   =
+   type:`object` content:'.'.{ /[A-Za-z_]+/ }+
+   ;
+
+id
+   =
+   type:`id` content:/\d+/
+   ;
+
+string
+   =
+   type:`string` '"' content:/([^"]|\s)+/ '"'
+   ;
+
+arg
+   =
+   type:`argument` "$" content:/(\d+|@|[A-Za-z_]+)/
+   ;

@@ -45,6 +45,7 @@ class If(BaseToken, tkn="if"):
         for token in self.obj["elif_"]:
             self._elif.append(self.pt[token["type"]](token, self.pt))
         self._else = self.pt[self.obj["else_"]["type"]](self.obj["else_"], self.pt) if self.obj[
+                                                                                           "else_"] is not None else None
 
     async def call(self, env):
         if await self.cond.call(env):

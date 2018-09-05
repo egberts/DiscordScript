@@ -177,12 +177,52 @@ class DiscordScriptParser(Parser):
         self.name_last_node('condition')
         self._token(')')
         self._token('{')
+        self._generic_body_()
+        self.name_last_node('content')
+        self._token('}')
         with self._optional():
-            self._generic_body_()
+
+            def block4():
+                self._elif_stmt_()
+            self._closure(block4)
+            self.name_last_node('elif_')
+        with self._optional():
+            self._else_stmt_()
+            self.name_last_node('else_')
+        self.ast._define(
+            ['condition', 'content', 'elif_', 'else_', 'type'],
+            []
+        )
+
+    @tatsumasu()
+    def _elif_stmt_(self):  # noqa
+        self._constant('elif')
+        self.name_last_node('type')
+        self._token('elif')
+        self._token('(')
+        self._logic_main_()
+        self.name_last_node('condition')
+        self._token(')')
+        self._token('{')
+        self._generic_body_()
         self.name_last_node('content')
         self._token('}')
         self.ast._define(
             ['condition', 'content', 'type'],
+            []
+        )
+
+    @tatsumasu()
+    def _else_stmt_(self):  # noqa
+        self._constant('else')
+        self.name_last_node('type')
+        self._token('else')
+        self._token('{')
+        self._generic_body_()
+        self.name_last_node('content')
+        self._token('}')
+        self.ast._define(
+            ['content', 'type'],
             []
         )
 
@@ -365,6 +405,12 @@ class DiscordScriptSemantics(object):
         return ast
 
     def if_stmt(self, ast):  # noqa
+        return ast
+
+    def elif_stmt(self, ast):  # noqa
+        return ast
+
+    def else_stmt(self, ast):  # noqa
         return ast
 
     def func_main(self, ast):  # noqa

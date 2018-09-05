@@ -46,8 +46,19 @@ assign_cont
 
 if_stmt
    =
-   type:`if` 'if' '(' condition:logic_main ')' '{' content:[generic_body] '}'
+   type:`if` 'if' '(' condition:logic_main ')' '{' content:generic_body '}' [elif:{ elif_stmt }*][else:else_stmt]
    ;
+
+elif_stmt
+   =
+   type:`elif` 'elif' '(' condition:logic_main ')' '{' content:generic_body '}'
+   ;
+
+else_stmt
+   =
+   type:`else` 'else' '{' content:generic_body '}'
+   ;
+
 
 func_main
    =

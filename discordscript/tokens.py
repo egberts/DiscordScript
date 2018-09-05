@@ -41,11 +41,23 @@ class If(BaseToken, tkn="if"):
         self.cond = Logic(self.obj["condition"], self.pt)
         for token in self._body:
             self.body.append(self.pt[token["type"]](token, self.pt))
+        self._elif = []
+        for token in self.obj["elif"]:
+            self._elif.append(self.pt[token["type"]](token, self.pt))
+        self._else = self.pt[self.obj["else"]["type"]](self.obj["else"]["type"], self.pt) if self.obj[
+                                                                                                 "else"] is not None else None
 
     async def call(self, env):
         if await self.cond.call(env):
             for token in self.body:
                 await token.call(env)
+        else:
+            for i in self._elif:
+                sc = await i.call(env)
+                if sc:
+                    return
+            if self._else is not None:
+                await self._else.call(env)
 
 
 class Function(BaseToken, tkn="function"):
@@ -167,3 +179,27 @@ class Assignment(BaseToken, tkn="assignment"):
         if self.varname in env:
             ConflictError("Variable name conflicts with environment variable")
         env.vars[self.varname] = await self.varval.call(env)
+
+
+class Elif(BaseToken, tkn="elif"):
+    def _parse(self):
+        self.cond = Logic(self.obj["condition"], self.pt)
+        for token in self._body:
+            self.body.append(self.pt[token["type"]](token, self.pt))
+
+    async def call(self, env):
+        co = await self.cond.call(env)
+        if co:
+            for token in self.body:
+                await token.call(env)
+        return co
+
+
+class Else(BaseToken, ekn="else"):
+    def _parse(self):
+        for token in self._body:
+            self.body.append(self.pt[token["type"]](token, self.pt))
+
+    async def call(self, env):
+        for token in self.body:
+            await token.call(env)

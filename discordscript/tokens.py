@@ -42,10 +42,9 @@ class If(BaseToken, tkn="if"):
         for token in self._body:
             self.body.append(self.pt[token["type"]](token, self.pt))
         self._elif = []
-        for token in self.obj["elif"]:
+        for token in self.obj["elif_"]:
             self._elif.append(self.pt[token["type"]](token, self.pt))
-        self._else = self.pt[self.obj["else"]["type"]](self.obj["else"]["type"], self.pt) if self.obj[
-                                                                                                 "else"] is not None else None
+        self._else = self.pt[self.obj["else_"]["type"]](self.obj["else_"], self.pt) if self.obj[
 
     async def call(self, env):
         if await self.cond.call(env):
@@ -195,7 +194,7 @@ class Elif(BaseToken, tkn="elif"):
         return co
 
 
-class Else(BaseToken, ekn="else"):
+class Else(BaseToken, tkn="else"):
     def _parse(self):
         for token in self._body:
             self.body.append(self.pt[token["type"]](token, self.pt))

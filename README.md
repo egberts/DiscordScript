@@ -33,5 +33,5 @@ python3.6 setup.py install
 ```
 * Write this into your file and replace `YOUR_TOKEN` with the bot token from before
 * Navigate to `test.ds`' directory and user `discordscript test.ds`
-* Test the Bot in the Server you added it to before
+* Test the Bot in the Server (Try writing `!ping`) you added it to before
 * When you're finished, hit `Ctrl+C` to quit

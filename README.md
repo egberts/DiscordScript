@@ -23,6 +23,7 @@ python3.6 setup.py install
 * Add the bot to a Server and give it permissions to read and write in a channel
 * Install Discord Script if you haven't done it before
 * Create a file named `test.ds` and open it
+
 ```
 @token:YOUR_TOKEN;
 @prefix:!;
@@ -31,6 +32,7 @@ python3.6 setup.py install
    say "Pong!";
 }
 ```
+
 * Write this into your file and replace `YOUR_TOKEN` with the bot token from before
 * Navigate to `test.ds`' directory and user `discordscript test.ds`
 * Test the Bot in the Server (Try writing `!ping`) you added it to before

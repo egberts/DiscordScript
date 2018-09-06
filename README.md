@@ -24,6 +24,7 @@ python3.6 setup.py install
 * Install Discord Script if you haven't done it before
 * Create a file named `test.ds` and open it
 
+
 ```
 @token:YOUR_TOKEN;
 @prefix:!;
@@ -32,6 +33,7 @@ python3.6 setup.py install
    say "Pong!";
 }
 ```
+
 
 * Write this into your file and replace `YOUR_TOKEN` with the bot token from before
 * Navigate to `test.ds`' directory and user `discordscript test.ds`

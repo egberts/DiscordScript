@@ -60,6 +60,12 @@ else_stmt
    ;
 
 
+func_embedded
+   =
+   type:`function_embedded` '(' content:(/[A-Za-z_]+/ { item }*) ')'
+   ;
+
+
 func_main
    =
    type:`function` content:(/[A-Za-z_]+/ { item }*) ";"
@@ -93,6 +99,7 @@ item
    | string
    | keyword
    | id
+   | func_embedded
    ;
 
 keyword

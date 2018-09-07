@@ -203,3 +203,16 @@ class Else(BaseToken, tkn="else"):
     async def call(self, env):
         for token in self.body:
             await token.call(env)
+
+
+class EmbeddedFunction(BaseToken, tkn="function_embedded"):
+    def _parse(self):
+        if self._body[0] not in FUNCTIONS.keys():
+            StatementError(f"Invalid function: \033[34m{self._body[0]}\033[0m")
+        self.args = []
+        for token in self._body[1]:
+            self.args.append(self.pt[token["type"]](token, self.pt))
+        self.func = FUNCTIONS[self._body[0]]
+
+    async def call(self, env):
+        return await self.func(env.client, env.msg, [await i.call(env) for i in self.args], env)

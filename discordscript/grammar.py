@@ -180,12 +180,11 @@ class DiscordScriptParser(Parser):
         self._generic_body_()
         self.name_last_node('content')
         self._token('}')
-        with self._optional():
 
-            def block4():
-                self._elif_stmt_()
-            self._closure(block4)
-            self.name_last_node('elif_')
+        def block4():
+            self._elif_stmt_()
+        self._closure(block4)
+        self.name_last_node('elif_')
         with self._optional():
             self._else_stmt_()
             self.name_last_node('else_')
@@ -221,6 +220,24 @@ class DiscordScriptParser(Parser):
         self._generic_body_()
         self.name_last_node('content')
         self._token('}')
+        self.ast._define(
+            ['content', 'type'],
+            []
+        )
+
+    @tatsumasu()
+    def _func_embedded_(self):  # noqa
+        self._constant('function_embedded')
+        self.name_last_node('type')
+        self._token('(')
+        with self._group():
+            self._pattern(r'[A-Za-z_]+')
+
+            def block2():
+                self._item_()
+            self._closure(block2)
+        self.name_last_node('content')
+        self._token(')')
         self.ast._define(
             ['content', 'type'],
             []
@@ -326,6 +343,8 @@ class DiscordScriptParser(Parser):
                 self._keyword_()
             with self._option():
                 self._id_()
+            with self._option():
+                self._func_embedded_()
             self._error('no available options')
 
     @tatsumasu()
@@ -411,6 +430,9 @@ class DiscordScriptSemantics(object):
         return ast
 
     def else_stmt(self, ast):  # noqa
+        return ast
+
+    def func_embedded(self, ast):  # noqa
         return ast
 
     def func_main(self, ast):  # noqa

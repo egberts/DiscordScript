@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name="DiscordScript",
-      version="0.1.4",
+      version="0.2.0",
       description="Simple scripting Language for Discord Bots. VERY Beta",
       author="Jacob Jäger",
       author_email="jcb1317@protonmail.com",
